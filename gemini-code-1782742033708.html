@@ -1,6 +1,3 @@
-bash
-
-cat > /mnt/user-data/outputs/mars-safe-place-anr.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,35 +25,15 @@ cat > /mnt/user-data/outputs/mars-safe-place-anr.html << 'HTMLEOF'
         ::-webkit-scrollbar-thumb { background: #dcdad2; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #c7c5bd; }
 
-        /* Desk card hover ring */
-        .desk-card { transition: border-color .15s, box-shadow .15s; }
+        .desk-card { transition: border-color .15s, box-shadow .15s; background: #ffffff; border: 1px solid #e5e4de; }
         .desk-card:hover { border-color: #a8a7a0 !important; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
 
-        /* Inline comment edit */
-        .comment-edit { display: none; }
-        .desk-card.editing .comment-edit { display: block; }
-        .desk-card.editing .comment-display { display: none; }
-
-        /* Stage pill colours */
-        .pill-outreach { background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
-        .pill-intalks  { background:#f5f3ff; color:#7c3aed; border-color:#ddd6fe; }
-        .pill-neg      { background:#fff7ed; color:#c2410c; border-color:#fed7aa; }
-        .pill-active   { background:#f0fdf4; color:#15803d; border-color:#bbf7d0; }
-        .pill-catalogue{ background:#faf5ff; color:#7e22ce; border-color:#e9d5ff; }
-        .pill-prospect { background:#fefce8; color:#a16207; border-color:#fef08a; }
-
-        /* Smooth view transitions */
         .view-section { animation: fadeIn .18s ease; }
         @keyframes fadeIn { from { opacity:.4; transform:translateY(3px); } to { opacity:1; transform:none; } }
-
-        /* Empty state */
-        .empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:8px; color:#b0aea7; padding:2rem; text-align:center; }
-        .empty-state svg { opacity:.35; }
     </style>
 </head>
 <body class="text-neutral-900 min-h-screen flex flex-col antialiased">
 
-<!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
 <header class="border-b border-[#e5e4de] px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4 sticky top-0 bg-[#f5f4f0]/92 backdrop-blur-md z-50">
     <div>
         <h1 class="text-xl font-normal tracking-tight text-neutral-900 serif-title flex items-center gap-2.5">
@@ -66,16 +43,16 @@ cat > /mnt/user-data/outputs/mars-safe-place-anr.html << 'HTMLEOF'
     </div>
 
     <div class="flex flex-wrap items-center gap-1.5">
-        <button onclick="switchView('active-desks')" id="nav-btn-desks" class="nav-btn px-3.5 py-1.5 text-xs font-bold rounded-lg transition">Active Focal Desks</button>
+        <button onclick="switchView('active-desks')" id="nav-btn-desks" class="nav-btn px-3.5 py-1.5 text-xs font-bold rounded-lg transition active">Active Focal Desks</button>
         <button onclick="switchView('all-roster')"   id="nav-btn-all"   class="nav-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg transition">Archive & Other Stages</button>
-        <button onclick="switchView('system-logs')"  id="nav-btn-logs"  class="nav-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg transition">Interaction Logs</button>
+        <button onclick="switchView('system-logs')"   id="nav-btn-logs"  class="nav-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg transition">Interaction Logs</button>
 
         <div class="h-4 w-px bg-neutral-300 mx-1.5 hidden lg:block"></div>
 
-        <button onclick="exportData()" class="p-2 bg-white hover:bg-neutral-50 border border-neutral-200 text-neutral-700 rounded-lg text-xs font-medium flex items-center gap-1 transition" title="Export JSON">
+        <button onclick="exportData()" class="p-2 bg-white hover:bg-neutral-50 border border-neutral-200 text-neutral-700 rounded-lg text-xs font-medium flex items-center gap-1 transition">
             <i data-lucide="download" class="w-3.5 h-3.5"></i> Export
         </button>
-        <button onclick="triggerImport()" class="p-2 bg-white hover:bg-neutral-50 border border-neutral-200 text-neutral-700 rounded-lg transition" title="Import JSON">
+        <button onclick="triggerImport()" class="p-2 bg-white hover:bg-neutral-50 border border-neutral-200 text-neutral-700 rounded-lg transition">
             <i data-lucide="upload" class="w-3.5 h-3.5"></i>
         </button>
         <input type="file" id="importFile" class="hidden" onchange="importData(event)">
@@ -88,55 +65,31 @@ cat > /mnt/user-data/outputs/mars-safe-place-anr.html << 'HTMLEOF'
     .nav-btn.active { background:#171717; color:#fff; box-shadow: 0 1px 3px rgba(0,0,0,.18); }
 </style>
 
-<!-- ═══════════════════════════════ MAIN ═══════════════════════════════ -->
 <main class="flex-1 p-5 lg:p-7 max-w-[1640px] w-full mx-auto space-y-7">
 
-    <!-- ── ACTIVE DESKS ── -->
     <div id="view-active-desks" class="view-section">
-
-        <!-- Pipeline summary strip -->
-        <div id="pipeline-strip" class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-5"></div>
-
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-            <!-- Outreach Desk -->
             <div class="paper-card rounded-2xl p-5 flex flex-col" style="height:760px">
                 <div class="flex justify-between items-center pb-4 border-b border-neutral-100 mb-4 gap-3">
-                    <div class="min-w-0">
-                        <h2 class="text-lg font-normal serif-title text-neutral-900 flex items-center gap-2 flex-wrap">
+                    <div>
+                        <h2 class="text-lg font-normal serif-title text-neutral-900 flex items-center gap-2">
                             Outreach Pipeline <span id="badge-outreach-count" class="text-xs font-sans font-bold bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-100">0</span>
                         </h2>
-                        <p class="text-[10px] uppercase tracking-wider text-neutral-400 font-medium mt-0.5">Initial campaign targets & cold streams</p>
                     </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <select id="sortOutreach" onchange="renderDesks()" class="bg-neutral-50 border border-neutral-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-neutral-600 focus:outline-none">
-                            <option value="recent">Recent</option>
-                            <option value="az">A–Z</option>
-                            <option value="comments">Activity</option>
-                        </select>
-                        <input type="text" id="searchOutreach" oninput="renderDesks()" placeholder="Filter…" class="bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-1.5 text-xs focus:outline-none font-medium text-neutral-800 placeholder-neutral-400 w-32">
-                    </div>
+                    <input type="text" id="searchOutreach" oninput="renderDesks()" placeholder="Filter..." class="bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-1.5 text-xs focus:outline-none font-medium text-neutral-800 placeholder-neutral-400 w-32">
                 </div>
                 <div class="flex-1 overflow-y-auto pr-1 space-y-2.5" id="outreach-desk-list"></div>
             </div>
 
-            <!-- In Talks Desk -->
             <div class="paper-card rounded-2xl p-5 flex flex-col" style="height:760px">
                 <div class="flex justify-between items-center pb-4 border-b border-neutral-100 mb-4 gap-3">
-                    <div class="min-w-0">
-                        <h2 class="text-lg font-normal serif-title text-neutral-900 flex items-center gap-2 flex-wrap">
+                    <div>
+                        <h2 class="text-lg font-normal serif-title text-neutral-900 flex items-center gap-2">
                             In Talks Desk <span id="badge-intalks-count" class="text-xs font-sans font-bold bg-purple-50 text-purple-700 px-2.5 py-0.5 rounded-full border border-purple-100">0</span>
                         </h2>
-                        <p class="text-[10px] uppercase tracking-wider text-neutral-400 font-medium mt-0.5">Active conversations & reciprocal feedback loops</p>
                     </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <select id="sortInTalks" onchange="renderDesks()" class="bg-neutral-50 border border-neutral-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-neutral-600 focus:outline-none">
-                            <option value="recent">Recent</option>
-                            <option value="az">A–Z</option>
-                            <option value="comments">Activity</option>
-                        </select>
-                        <input type="text" id="searchInTalks" oninput="renderDesks()" placeholder="Filter…" class="bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-1.5 text-xs focus:outline-none font-medium text-neutral-800 placeholder-neutral-400 w-32">
-                    </div>
+                    <input type="text" id="searchInTalks" oninput="renderDesks()" placeholder="Filter..." class="bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-1.5 text-xs focus:outline-none font-medium text-neutral-800 placeholder-neutral-400 w-32">
                 </div>
                 <div class="flex-1 overflow-y-auto pr-1 space-y-2.5" id="intalks-desk-list"></div>
             </div>
@@ -144,22 +97,18 @@ cat > /mnt/user-data/outputs/mars-safe-place-anr.html << 'HTMLEOF'
         </div>
     </div>
 
-    <!-- ── ARCHIVE & OTHER STAGES ── -->
     <div id="view-all-roster" class="view-section hidden space-y-5">
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="minor-counters-row"></div>
-
         <div class="paper-card rounded-2xl p-4 flex flex-col md:flex-row justify-between items-center gap-3">
-            <input type="text" id="archiveSearch" oninput="renderArchiveTable()" class="bg-neutral-50 border border-neutral-200 rounded-xl pl-4 pr-4 py-2 text-xs font-medium text-neutral-900 focus:outline-none w-full md:w-80" placeholder="Filter pipeline layers (Prospect, Negotiating, Active, Catalogue)…">
+            <input type="text" id="archiveSearch" oninput="renderArchiveTable()" class="bg-neutral-50 border border-neutral-200 rounded-xl pl-4 pr-4 py-2 text-xs font-medium text-neutral-900 focus:outline-none w-full md:w-80" placeholder="Filter other pipeline layers (Prospect, Active, Negotiating)...">
             <form id="fastAddForm" onsubmit="handleFastAdd(event)" class="flex gap-2 w-full md:w-auto">
-                <input type="text" id="fastName" required placeholder="Fast Artist Insertion" class="bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none flex-1 min-w-0">
+                <input type="text" id="fastName" required placeholder="Quick Add" class="bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none flex-1">
                 <select id="fastStage" class="bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-2 text-xs font-medium text-neutral-600 focus:outline-none">
                     <option value="Prospect">Prospect</option>
                     <option value="Negotiating">Negotiating</option>
                     <option value="Active">Active</option>
                     <option value="Catalogue">Catalogue</option>
                 </select>
-                <button type="submit" class="bg-neutral-900 hover:bg-neutral-800 text-white font-semibold text-xs px-4 rounded-xl transition whitespace-nowrap">Insert</button>
+                <button type="submit" class="bg-neutral-900 text-white text-xs px-4 rounded-xl font-semibold">Insert</button>
             </form>
         </div>
 
@@ -167,7 +116,7 @@ cat > /mnt/user-data/outputs/mars-safe-place-anr.html << 'HTMLEOF'
             <div class="overflow-x-auto max-h-[520px]">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-neutral-50 border-b border-neutral-200 text-[10px] font-bold text-neutral-400 uppercase tracking-wider sticky top-0">
+                        <tr class="bg-neutral-50 border-b border-neutral-200 text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
                             <th class="px-5 py-3">Artist</th>
                             <th class="px-5 py-3">Stage</th>
                             <th class="px-5 py-3">Role</th>
@@ -183,784 +132,249 @@ cat > /mnt/user-data/outputs/mars-safe-place-anr.html << 'HTMLEOF'
         </div>
     </div>
 
-    <!-- ── SYSTEM LOGS ── -->
     <div id="view-system-logs" class="view-section hidden grid grid-cols-1 lg:grid-cols-3 gap-7">
         <div class="paper-card rounded-2xl p-5 h-fit">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">Append Workspace Log Row</h3>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">Append Workspace Note</h3>
             <form onsubmit="handleManualLog(event)" class="space-y-4 text-xs font-semibold text-neutral-700">
-                <div>
-                    <label class="block text-neutral-400 mb-1">Target Entity Name</label>
-                    <input type="text" id="logTarget" list="artist-datalist" required class="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-2 font-medium focus:outline-none" placeholder="e.g. Mat Zo">
-                    <datalist id="artist-datalist"></datalist>
-                </div>
-                <div>
-                    <label class="block text-neutral-400 mb-1">Activity Update Text Content</label>
-                    <textarea id="logComment" required rows="4" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-3 font-medium focus:outline-none" placeholder="Type milestone status update…"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 rounded-xl transition">Log Milestone</button>
+                <input type="text" id="logTarget" required class="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-2 focus:outline-none" placeholder="Target Artist Name">
+                <textarea id="logComment" required rows="4" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-3 focus:outline-none" placeholder="Type milestone status update..."></textarea>
+                <button type="submit" class="w-full bg-neutral-900 text-white font-bold py-2.5 rounded-xl">Log Milestone</button>
             </form>
-
-            <div class="border-t border-neutral-200 mt-6 pt-4">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Smart Ingest Multi-line Paste</h4>
-                <button onclick="switchView('quickadd')" class="w-full bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 text-indigo-700 font-bold py-2 rounded-xl text-xs transition">Open Multi-Line Parse Box</button>
-            </div>
+            <button onclick="switchView('quickadd')" class="w-full mt-4 bg-indigo-50 text-indigo-700 font-bold py-2 rounded-xl text-xs transition">Open Multi-Line Parse Box</button>
         </div>
 
         <div class="paper-card rounded-2xl p-6 lg:col-span-2">
             <h3 class="text-sm font-bold text-neutral-900 mb-4 serif-title">Chronological Audit Feed</h3>
-            <div class="space-y-2.5 max-h-[600px] overflow-y-auto pr-1" id="activity-feed-container"></div>
+            <div class="space-y-2.5 max-h-[600px] overflow-y-auto" id="activity-feed-container"></div>
         </div>
     </div>
 
-    <!-- ── QUICK ADD / BULK PARSE ── -->
     <div id="view-quickadd" class="view-section hidden max-w-xl mx-auto paper-card rounded-2xl p-6">
-        <button onclick="switchView('system-logs')" class="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-neutral-700 mb-5 transition font-semibold">
-            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Back to Logs
-        </button>
-        <h2 class="text-lg font-normal serif-title text-neutral-900 mb-1">Smart Batch Regex Parser</h2>
-        <p class="text-xs text-neutral-400 mb-4">Paste multiple unformatted lines to update the desks instantaneously.</p>
+        <h2 class="text-lg font-normal serif-title text-neutral-900 mb-4">Smart Batch Processing</h2>
         <form onsubmit="handleBulkPaste(event)" class="space-y-4">
-            <textarea id="bulkPasteText" required rows="12" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-4 font-mono text-xs text-neutral-800 focus:outline-none" placeholder="Artist Name - Comment statement details&#10;Another Artist: Fired follow up contract files today…"></textarea>
-            <button type="submit" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold py-3 rounded-xl transition">Synchronize Batch Streams</button>
+            <textarea id="bulkPasteText" required rows="12" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-4 font-mono text-xs focus:outline-none" placeholder="Artist Name - Note comment text details here..."></textarea>
+            <button type="submit" class="w-full bg-neutral-900 text-white text-xs font-bold py-3 rounded-xl">Execute Batch Parsing Sync</button>
         </form>
     </div>
 
 </main>
 
-<!-- ══════════════════════════ INLINE EDIT MODAL ══════════════════════════ -->
-<div id="edit-modal" class="fixed inset-0 bg-black/30 backdrop-blur-sm z-[100] hidden items-center justify-center p-4" onclick="closeEditModal(event)">
-    <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border border-neutral-200" onclick="event.stopPropagation()">
-        <h3 class="serif-title text-base font-normal text-neutral-900 mb-1" id="modal-title">Edit Artist</h3>
-        <p class="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold mb-4" id="modal-subtitle">Update fields below</p>
-        <input type="hidden" id="modal-idx">
-        <div class="space-y-3 text-xs font-semibold">
-            <div>
-                <label class="block text-neutral-400 mb-1">Spotify URL</label>
-                <input type="url" id="modal-spotify" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-2 font-medium focus:outline-none" placeholder="https://open.spotify.com/artist/…">
-            </div>
-            <div>
-                <label class="block text-neutral-400 mb-1">Country Code</label>
-                <input type="text" id="modal-country" maxlength="4" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-2 font-medium focus:outline-none uppercase" placeholder="GB / US / FR…">
-            </div>
-            <div>
-                <label class="block text-neutral-400 mb-1">Add Log Note</label>
-                <textarea id="modal-comment" rows="3" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-3 font-medium focus:outline-none" placeholder="Quick update note…"></textarea>
-            </div>
-        </div>
-        <div class="flex gap-2 mt-5">
-            <button onclick="saveEditModal()" class="flex-1 bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 rounded-xl text-xs transition">Save</button>
-            <button onclick="document.getElementById('edit-modal').classList.replace('flex','hidden')" class="px-4 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-semibold py-2.5 rounded-xl text-xs transition">Cancel</button>
-        </div>
-    </div>
-</div>
-
-<!-- ═══════════════════════════════ SCRIPT ═══════════════════════════════ -->
 <script>
-// ─── SEED DATA ──────────────────────────────────────────────────────────────
+// CLEANED ARCHITECTURAL METADATA MATRIX CONTAINING INITIAL ROSTER CONTEXT
 const SEED = [
-{"name":"Mat Zo","stage":"In talks","role":"Owner + Scout","country":"GB","hometown":"","comments":1,"lastComment":"2026-06-11","created":"2026-06-11","spotify":"https://open.spotify.com/artist/matzo"},
-{"name":"Vexwave","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-01","spotify":""},
-{"name":"XvallariX","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-01","spotify":""},
-{"name":"STRAENGE","stage":"In talks","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-29","created":"2026-05-29","spotify":"https://open.spotify.com/artist/straenge"},
-{"name":"Aejisei","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-05-01","created":"2026-04-28","spotify":""},
-{"name":"Alex Keeper","stage":"In talks","role":"Owner + Scout","country":"FR","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Alfie Harding","stage":"In talks","role":"Owner","country":"GB","hometown":"","comments":2,"lastComment":"2026-05-12","created":"2026-05-11","spotify":""},
-{"name":"Tiësto","stage":"In talks","role":"Owner + Scout","country":"NL","hometown":"Amsterdam","comments":3,"lastComment":"2026-05-08","created":"2026-05-01","spotify":"https://open.spotify.com/artist/tiesto"},
-{"name":"ALIGN","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Angrybaby","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-05-01","created":"2026-04-28","spotify":""},
-{"name":"Attic Beats","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"AVELLO","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-04-29","created":"2026-04-28","spotify":""},
-{"name":"Bianca","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-05-28","spotify":"https://open.spotify.com/artist/bianca"},
-{"name":"BlockDaBeat","stage":"In talks","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"CARTFISH","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":2,"lastComment":"2026-06-19","created":"2026-06-18","spotify":"https://open.spotify.com/artist/cartfish"},
-{"name":"Casual Affairs","stage":"In talks","role":"Owner + Scout","country":"NL","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Charlie Shell","stage":"In talks","role":"Owner + Scout","country":"AU","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Chet Porter","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"Toronto","comments":1,"lastComment":"2026-04-28","created":"2026-04-28","spotify":""},
-{"name":"Chris Lake","stage":"In talks","role":"Owner + Scout","country":"GB","hometown":"London","comments":2,"lastComment":"2026-06-18","created":"2026-05-01","spotify":""},
-{"name":"clauds","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-06-05","spotify":"https://open.spotify.com/artist/clauds"},
-{"name":"CYRIL","stage":"In talks","role":"Owner + Scout","country":"AU","hometown":"","comments":2,"lastComment":"2026-05-08","created":"2026-04-28","spotify":""},
-{"name":"DANN","stage":"In talks","role":"Owner + Scout","country":"SK","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"demotapes","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"dentist","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"DJ Sonnenbrand","stage":"In talks","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-26","created":"2026-05-22","spotify":""},
-{"name":"DJ TOXIC","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Dream Relic","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-04","spotify":""},
-{"name":"drenchrome","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-17","created":"2026-06-17","spotify":"https://open.spotify.com/artist/drenchrome"},
-{"name":"Drics","stage":"In talks","role":"Owner + Scout","country":"FR","hometown":"","comments":2,"lastComment":"2026-05-13","created":"2026-05-06","spotify":""},
-{"name":"Drinks On Me","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Duumu","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"DYGO","stage":"In talks","role":"Owner + Scout","country":"NL","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"dóttir.x","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-06-16","spotify":"https://open.spotify.com/artist/dottirx"},
-{"name":"elMefti","stage":"In talks","role":"Owner + Scout","country":"SY","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"eric404","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":3,"lastComment":"2026-06-04","created":"2026-06-02","spotify":""},
-{"name":"ero808","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":2,"lastComment":"2026-06-19","created":"2026-06-18","spotify":"https://open.spotify.com/artist/ero808"},
-{"name":"fkblnde","stage":"In talks","role":"Owner + Scout","country":"CA","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Foxela","stage":"In talks","role":"Owner + Scout","country":"SG","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Grav3","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":""},
-{"name":"Harry Hayes","stage":"In talks","role":"Owner + Scout","country":"AU","hometown":"","comments":1,"lastComment":"2026-04-28","created":"2026-04-28","spotify":""},
-{"name":"HOMALS","stage":"In talks","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-05-29","created":"2026-05-29","spotify":"https://open.spotify.com/artist/homals"},
-{"name":"Indigo Eyes","stage":"In talks","role":"Owner + Scout","country":"GB","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Jasq","stage":"In talks","role":"Owner","country":"PL","hometown":"","comments":2,"lastComment":"2026-04-28","created":"2026-04-20","spotify":""},
-{"name":"Jerri","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":2,"lastComment":"2026-06-18","created":"2026-06-04","spotify":"https://open.spotify.com/artist/jerri"},
-{"name":"Jerry Luca","stage":"In talks","role":"Owner","country":"PE","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-19","spotify":""},
-{"name":"JEV","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"JIUZ","stage":"In talks","role":"Owner","country":"","hometown":"","comments":2,"lastComment":"2026-05-07","created":"2026-04-30","spotify":""},
-{"name":"Joey Cash","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"KEIGO","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Kitty Hall","stage":"In talks","role":"Owner","country":"GB","hometown":"","comments":2,"lastComment":"2026-05-12","created":"2026-05-11","spotify":""},
-{"name":"KlangAkrobaten","stage":"In talks","role":"Owner + Scout","country":"DE","hometown":"","comments":0,"lastComment":"","created":"2026-05-19","spotify":"https://open.spotify.com/artist/klang"},
-{"name":"KOAN Sound","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"Bristol","comments":0,"lastComment":"","created":"2026-06-11","spotify":"https://open.spotify.com/artist/koan"},
-{"name":"longstoryshort","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"M4S","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Mat Eclair","stage":"In talks","role":"Owner","country":"","hometown":"","comments":2,"lastComment":"2026-05-13","created":"2026-05-13","spotify":""},
-{"name":"Mika Heggemann","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"N33T","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"nikko","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-04-28","created":"2026-04-28","spotify":""},
-{"name":"nimino","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"London","comments":1,"lastComment":"2026-04-28","created":"2026-04-28","spotify":""},
-{"name":"NVIUS","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-06-04","spotify":""},
-{"name":"nøll","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"Austin","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"OddKidOut","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"Philadelphia","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"ola.wav","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Oliver Twixt","stage":"In talks","role":"Owner","country":"US","hometown":"","comments":2,"lastComment":"2026-05-20","created":"2026-05-19","spotify":""},
-{"name":"Ordley","stage":"In talks","role":"Owner + Scout","country":"AU","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Oscar Yuan","stage":"In talks","role":"Owner","country":"CN","hometown":"","comments":0,"lastComment":"","created":"2026-06-03","spotify":"https://open.spotify.com/artist/yuan"},
-{"name":"PhatAdam","stage":"In talks","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"Philxmusic","stage":"In talks","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-19","spotify":""},
-{"name":"Porter Robinson","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"Chapel Hill","comments":0,"lastComment":"","created":"2026-06-11","spotify":"https://open.spotify.com/artist/porter"},
-{"name":"Rad Cat","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"San Diego","comments":1,"lastComment":"2026-04-28","created":"2026-04-28","spotify":""},
-{"name":"Redfern (BR)","stage":"In talks","role":"Owner","country":"BR","hometown":"","comments":2,"lastComment":"2026-05-13","created":"2026-04-30","spotify":""},
-{"name":"rxi","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Ryan Case","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Ryan Nevis","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-04-28","created":"2026-04-28","spotify":""},
-{"name":"San Holo","stage":"In talks","role":"Owner + Scout","country":"NL","hometown":"","comments":0,"lastComment":"","created":"2026-06-11","spotify":"https://open.spotify.com/artist/sanholo"},
-{"name":"SILK","stage":"In talks","role":"Owner + Scout","country":"GB","hometown":"","comments":1,"lastComment":"2026-05-12","created":"2026-05-12","spotify":""},
-{"name":"Sillage","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":""},
-{"name":"SNXP","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Sonnee","stage":"In talks","role":"Owner","country":"GB","hometown":"","comments":1,"lastComment":"2026-05-14","created":"2026-05-14","spotify":""},
-{"name":"Staarz","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-12","spotify":""},
-{"name":"Subtact","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Super Duper","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"Nashville","comments":1,"lastComment":"2026-04-28","created":"2026-04-28","spotify":""},
-{"name":"SVDKO","stage":"In talks","role":"Owner + Scout","country":"BE","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"V. Christie","stage":"In talks","role":"Owner","country":"NO","hometown":"","comments":3,"lastComment":"2026-05-11","created":"2026-04-30","spotify":""},
-{"name":"very cool tutorials","stage":"In talks","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Viiq","stage":"In talks","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Virgin Miri","stage":"In talks","role":"Owner","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-05-28","spotify":"https://open.spotify.com/artist/miri"},
-{"name":"Warriner","stage":"In talks","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-19","spotify":""},
-{"name":"waypoint on noclip","stage":"In talks","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"Westwood","stage":"In talks","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-12","created":"2026-06-11","spotify":"https://open.spotify.com/artist/westwood"},
-{"name":"Yetti","stage":"In talks","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-04-27","created":"2026-04-27","spotify":""},
-{"name":"Apex","stage":"Negotiating","role":"Owner","country":"","hometown":"","comments":4,"lastComment":"2026-05-08","created":"2026-05-07","spotify":""},
-{"name":"BILAJINA","stage":"Negotiating","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-12","spotify":""},
-{"name":"Conrad Taylor","stage":"Negotiating","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-04-22","created":"2026-04-21","spotify":""},
-{"name":"DJ JHG","stage":"Negotiating","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-04-28","created":"2026-04-28","spotify":""},
-{"name":"DJ ORBITAL","stage":"Negotiating","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Em Louise","stage":"Negotiating","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-12","spotify":""},
-{"name":"Garnic","stage":"Negotiating","role":"Owner","country":"ES","hometown":"","comments":2,"lastComment":"2026-05-21","created":"2026-05-20","spotify":""},
-{"name":"Harry Oliver","stage":"Negotiating","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-12","created":"2026-06-08","spotify":""},
-{"name":"Hester","stage":"Negotiating","role":"Owner","country":"AU","hometown":"","comments":1,"lastComment":"2026-05-12","created":"2026-05-12","spotify":""},
-{"name":"Icarus","stage":"Negotiating","role":"Owner + Scout","country":"GB","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Juche","stage":"Negotiating","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"K.ONE","stage":"Negotiating","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-12","created":"2026-04-23","spotify":""},
-{"name":"KRYPTIK","stage":"Negotiating","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-05","spotify":""},
-{"name":"LUKE ALEXANDER","stage":"Negotiating","role":"Owner","country":"US","hometown":"","comments":2,"lastComment":"2026-05-05","created":"2026-04-23","spotify":""},
-{"name":"MALARKEY","stage":"Negotiating","role":"Owner + Scout","country":"GB","hometown":"","comments":3,"lastComment":"2026-06-18","created":"2026-04-23","spotify":""},
-{"name":"Nic Nova","stage":"Negotiating","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-07","spotify":""},
-{"name":"OKAYVAL","stage":"Negotiating","role":"Owner","country":"CO","hometown":"","comments":2,"lastComment":"2026-05-05","created":"2026-04-21","spotify":""},
-{"name":"Old Jim","stage":"Negotiating","role":"Owner","country":"DE","hometown":"Modena","comments":0,"lastComment":"","created":"2026-05-01","spotify":""},
-{"name":"orion","stage":"Negotiating","role":"Owner + Scout","country":"US","hometown":"","comments":3,"lastComment":"2026-05-07","created":"2026-04-28","spotify":""},
-{"name":"PREECE","stage":"Negotiating","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Sami UK","stage":"Negotiating","role":"Owner","country":"","hometown":"","comments":5,"lastComment":"2026-05-13","created":"2026-05-07","spotify":""},
-{"name":"ZØMB","stage":"Negotiating","role":"Owner + Scout","country":"DE","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"gabriawll","stage":"Active","role":"Owner","country":"FR","hometown":"","comments":0,"lastComment":"","created":"2026-04-19","spotify":""},
-{"name":"CERES","stage":"Active","role":"Owner + Scout","country":"BR","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"DJ PUMA","stage":"Active","role":"Owner","country":"","hometown":"","comments":2,"lastComment":"2026-06-18","created":"2026-05-14","spotify":""},
-{"name":"KUČKA","stage":"Active","role":"Owner + Scout","country":"US","hometown":"Liverpool","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"More Plastic","stage":"Active","role":"Owner + Scout","country":"DK","hometown":"Copenhagen","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Pat","stage":"Active","role":"Owner + Scout","country":"GB","hometown":"","comments":0,"lastComment":"","created":"2026-04-21","spotify":""},
-{"name":"ADB","stage":"Active","role":"Owner + Scout","country":"FR","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Barmuda","stage":"Active","role":"Owner + Scout","country":"NL","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":"https://open.spotify.com/artist/barmuda"},
-{"name":"BLL4X","stage":"Active","role":"Owner + Scout","country":"BR","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"BroA$taR","stage":"Active","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"CAIRO!","stage":"Active","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Coben","stage":"Active","role":"Owner + Scout","country":"GB","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Conni","stage":"Active","role":"Commented","country":"GB","hometown":"","comments":1,"lastComment":"2026-06-19","created":"2026-04-23","spotify":"https://open.spotify.com/artist/conni"},
-{"name":"D4N","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Aditya Sharma","stage":"Active","role":"Owner + Scout","country":"IN","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"dg.","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"eerie","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"GASPXR","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"ghost funeral","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Irokz","stage":"Active","role":"Owner + Scout","country":"FR","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"JB Hain","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"joegarratt","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"LNX","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Oxlo","stage":"Active","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Rameses B","stage":"Active","role":"Owner","country":"US","hometown":"Leeds","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"refri","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"RezaDead","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Sam Day","stage":"Active","role":"Owner + Scout","country":"GB","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Schrandy","stage":"Active","role":"Owner + Scout","country":"DE","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Silver Bullet","stage":"Active","role":"Owner","country":"GB","hometown":"","comments":0,"lastComment":"","created":"2026-05-18","spotify":""},
-{"name":"SKYHIGH","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"SMOORIBA","stage":"Active","role":"Owner + Scout","country":"GB","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"soulworn","stage":"Active","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"svlient","stage":"Active","role":"Owner + Scout","country":"UA","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Syn Cole","stage":"Active","role":"Owner","country":"EE","hometown":"Tallinn","comments":1,"lastComment":"2026-06-19","created":"2026-04-23","spotify":"https://open.spotify.com/artist/syncole"},
-{"name":"TANTRON","stage":"Active","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"W4ddles","stage":"Active","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Brooks","stage":"Catalogue","role":"Owner","country":"NL","hometown":"Eindhoven","comments":0,"lastComment":"","created":"2026-04-23","spotify":"https://open.spotify.com/artist/brooks"},
-{"name":"Cartoon","stage":"Catalogue","role":"Commented","country":"","hometown":"","comments":1,"lastComment":"2026-05-05","created":"2026-04-23","spotify":""},
-{"name":"Crumb Pit","stage":"Catalogue","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-05-05","created":"2026-04-23","spotify":""},
-{"name":"DRXWCHILL","stage":"Catalogue","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Baby Jane","stage":"Catalogue","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-04-23","spotify":""},
-{"name":"EMPIRICAL","stage":"Catalogue","role":"Owner","country":"GB","hometown":"","comments":1,"lastComment":"2026-05-14","created":"2026-05-13","spotify":""},
-{"name":"Fabian Mazur","stage":"Catalogue","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"freddz808","stage":"Catalogue","role":"Owner","country":"","hometown":"","comments":2,"lastComment":"2026-05-04","created":"2026-04-23","spotify":"https://open.spotify.com/artist/freddz"},
-{"name":"It's Different","stage":"Catalogue","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-05-12","created":"2026-04-23","spotify":""},
-{"name":"jazza's dance party","stage":"Catalogue","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"Ship Wrek","stage":"Catalogue","role":"Owner","country":"US","hometown":"Richmond","comments":1,"lastComment":"2026-06-16","created":"2026-04-23","spotify":"https://open.spotify.com/artist/shipwrek"},
-{"name":"QKReign","stage":"Catalogue","role":"Owner","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":"https://open.spotify.com/artist/qkreign"},
-{"name":"Southby","stage":"Catalogue","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-23","spotify":""},
-{"name":"2night","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":""},
-{"name":"3DDY","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-15","created":"2026-05-14","spotify":""},
-{"name":"4andre","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":"https://open.spotify.com/artist/4andre"},
-{"name":"6 SENSE","stage":"Outreach","role":"Owner","country":"PH","hometown":"","comments":1,"lastComment":"2026-06-01","created":"2026-05-19","spotify":""},
-{"name":"8485","stage":"Outreach","role":"Owner + Scout","country":"CA","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":""},
-{"name":"ACRAZE","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"Orlando","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":"https://open.spotify.com/artist/acraze"},
-{"name":"AEREA","stage":"Outreach","role":"Owner + Scout","country":"ES","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-03","spotify":""},
-{"name":"Alden Martin","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-19","spotify":""},
-{"name":"Amava","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-03","spotify":""},
-{"name":"ANTISOCIAL","stage":"Outreach","role":"Owner + Scout","country":"PL","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":""},
-{"name":"Arlo","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-17","created":"2026-06-17","spotify":""},
-{"name":"Astrid Pierce","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-06-01","spotify":""},
-{"name":"ATALE","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":2,"lastComment":"2026-05-12","created":"2026-05-07","spotify":""},
-{"name":"awaitedfate","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-26","created":"2026-05-26","spotify":""},
-{"name":"BaBa","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":"https://open.spotify.com/artist/baba"},
-{"name":"BABYKIRA","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":""},
-{"name":"Badger","stage":"Outreach","role":"Owner + Scout","country":"GB","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-06-16","spotify":"https://open.spotify.com/artist/badger"},
-{"name":"baldgirl","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-04","spotify":""},
-{"name":"Bank Holiday","stage":"Outreach","role":"Commented","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"bbyclose","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-04-20","spotify":""},
-{"name":"BEADS","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-22","spotify":"https://open.spotify.com/artist/beads"},
-{"name":"bennytheghost","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-06-16","spotify":""},
-{"name":"benten","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-05-26","created":"2026-05-23","spotify":"https://open.spotify.com/artist/benten"},
-{"name":"Billi Royce","stage":"Outreach","role":"Owner","country":"US","hometown":"Miami","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":"https://open.spotify.com/artist/billi"},
-{"name":"Blaise Bracic","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-14","spotify":""},
-{"name":"Brian Jaims","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-04","spotify":""},
-{"name":"bullet tooth","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-06-09","spotify":"https://open.spotify.com/artist/tooth"},
-{"name":"bulletrain","stage":"Outreach","role":"Owner","country":"SE","hometown":"","comments":1,"lastComment":"2026-06-03","created":"2026-06-03","spotify":""},
-{"name":"Butters","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-30","spotify":""},
-{"name":"BYNX","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":"https://open.spotify.com/artist/bynx"},
-{"name":"BYSTANDER","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-19","spotify":""},
-{"name":"Caden","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-06-16","spotify":""},
-{"name":"Calvin Harris","stage":"Outreach","role":"Owner + Scout","country":"GB","hometown":"Dumfries","comments":1,"lastComment":"2026-05-01","created":"2026-05-01","spotify":""},
-{"name":"CAYVO","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-01","spotify":""},
-{"name":"celes.wav","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":3,"lastComment":"2026-05-04","created":"2026-04-29","spotify":""},
-{"name":"Chambray","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-04","spotify":"https://open.spotify.com/artist/chambray"},
-{"name":"Chitra","stage":"Outreach","role":"Owner","country":"AU","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-19","spotify":""},
-{"name":"Chris Lorenzo","stage":"Outreach","role":"Owner + Scout","country":"GB","hometown":"Birmingham","comments":1,"lastComment":"2026-06-04","created":"2026-06-04","spotify":""},
-{"name":"CHYL","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-06-01","created":"2026-06-01","spotify":""},
-{"name":"Citizen","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-06-12","created":"2026-06-11","spotify":""},
-{"name":"clide","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-06-16","spotify":"https://open.spotify.com/artist/clide"},
-{"name":"Co","stage":"Outreach","role":"Owner + Scout","country":"NL","hometown":"","comments":2,"lastComment":"2026-06-04","created":"2026-06-03","spotify":""},
-{"name":"Coded Distress","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-17","created":"2026-06-17","spotify":""},
-{"name":"Cosette","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-18","created":"2026-06-18","spotify":"https://open.spotify.com/artist/cosette"},
-{"name":"Costa Music","stage":"Outreach","role":"Owner","country":"SE","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"cudos","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-05-29","created":"2026-05-29","spotify":""},
-{"name":"CUVLT","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"Cyclops","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-06-04","spotify":""},
-{"name":"D A N N Y","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-13","created":"2026-05-13","spotify":""},
-{"name":"Daniel Leggs","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-05-15","created":"2026-05-14","spotify":""},
-{"name":"Danny Snowden","stage":"Outreach","role":"Owner","country":"GB","hometown":"","comments":2,"lastComment":"2026-05-08","created":"2026-05-07","spotify":""},
-{"name":"DELACOUR","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-18","created":"2026-06-18","spotify":"https://open.spotify.com/artist/delacour"},
-{"name":"DJ Johnny SA","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-02","spotify":""},
-{"name":"DJ SCHEMA","stage":"Outreach","role":"Owner","country":"IE","hometown":"","comments":1,"lastComment":"2026-05-26","created":"2026-05-22","spotify":"https://open.spotify.com/artist/djschema"},
-{"name":"DÏVÄG","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-03","created":"2026-06-01","spotify":""},
-{"name":"Ecchi.mp4","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-04-23","spotify":""},
-{"name":"Ellie Scougall","stage":"Outreach","role":"Owner + Scout","country":"GB","hometown":"","comments":1,"lastComment":"2026-06-18","created":"2026-06-18","spotify":""},
-{"name":"emma who?","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-15","created":"2026-05-14","spotify":""},
-{"name":"Fery Lionfarsi","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-03","spotify":""},
-{"name":"Filip Grönlund","stage":"Outreach","role":"Owner","country":"SE","hometown":"","comments":0,"lastComment":"","created":"2026-05-22","spotify":"https://open.spotify.com/artist/filip"},
-{"name":"FLOYD WONDER","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":""},
-{"name":"Forcold","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-01","spotify":""},
-{"name":"girlydeath","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-01","spotify":""},
-{"name":"gleame","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-14","spotify":""},
-{"name":"gloss*","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-04-23","spotify":""},
-{"name":"Golden Cats","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-05","spotify":""},
-{"name":"graekat","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-17","created":"2026-06-17","spotify":""},
-{"name":"greek","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-03","spotify":""},
-{"name":"GREG 99","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-17","created":"2026-06-17","spotify":"https://open.spotify.com/artist/greg99"},
-{"name":"Gygas","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"Hanz","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"HANÀ","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-19","spotify":""},
-{"name":"Hartzon","stage":"Outreach","role":"Owner","country":"NO","hometown":"","comments":1,"lastComment":"2026-05-15","created":"2026-05-14","spotify":""},
-{"name":"heartcoregirl","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-05-29","created":"2026-05-29","spotify":""},
-{"name":"Helve","stage":"Outreach","role":"Owner + Scout","country":"GB","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":""},
-{"name":"horsegiirL","stage":"Outreach","role":"Owner + Scout","country":"DE","hometown":"","comments":0,"lastComment":"","created":"2026-04-27","spotify":""},
-{"name":"i'm loam","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-03","spotify":""},
-{"name":"ideasforconversations","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":"https://open.spotify.com/artist/ideas"},
-{"name":"IndustryPlant","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":""},
-{"name":"IRIAS","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-17","created":"2026-06-17","spotify":""},
-{"name":"jacal","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":""},
-{"name":"Jake Shore","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":"https://open.spotify.com/artist/jakeshore"},
-{"name":"Jakk Rinse","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":2,"lastComment":"2026-06-04","created":"2026-05-29","spotify":"https://open.spotify.com/artist/jakk"},
-{"name":"JAKKOB","stage":"Outreach","role":"Owner","country":"AU","hometown":"","comments":0,"lastComment":"","created":"2026-04-30","spotify":""},
-{"name":"jigitz","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-05-04","created":"2026-05-04","spotify":""},
-{"name":"John Conner","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-03","spotify":""},
-{"name":"jopenga","stage":"Outreach","role":"Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-04-30","created":"2026-04-30","spotify":""},
-{"name":"Josh Fawaz","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-14","created":"2026-05-14","spotify":""},
-{"name":"Justin Irby","stage":"Outreach","role":"Owner + Scout","country":"SG","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-06-16","spotify":"https://open.spotify.com/artist/justin"},
-{"name":"Kaikobad","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"Karner H","stage":"Outreach","role":"Owner","country":"IT","hometown":"","comments":0,"lastComment":"","created":"2026-05-14","spotify":""},
-{"name":"Kaymo","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"Khim","stage":"Outreach","role":"Owner","country":"SG","hometown":"","comments":1,"lastComment":"2026-06-03","created":"2026-04-30","spotify":""},
-{"name":"Kilo Kent","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-29","created":"2026-05-29","spotify":""},
-{"name":"Lamb","stage":"Outreach","role":"Commented","country":"US","hometown":"","comments":1,"lastComment":"2026-05-04","created":"2026-04-20","spotify":""},
-{"name":"laurence.","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-26","created":"2026-05-22","spotify":"https://open.spotify.com/artist/laurence"},
-{"name":"lor2mg","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-06-03","created":"2026-06-03","spotify":"https://open.spotify.com/artist/lor"},
-{"name":"Love,Shaun","stage":"Outreach","role":"Owner","country":"GB","hometown":"","comments":1,"lastComment":"2026-05-14","created":"2026-05-10","spotify":""},
-{"name":"Luca Setti","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-12","created":"2026-05-12","spotify":""},
-{"name":"Luke DuBose","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-06-16","spotify":""},
-{"name":"LUM!X","stage":"Outreach","role":"Owner","country":"IT","hometown":"Linz","comments":0,"lastComment":"","created":"2026-05-30","spotify":""},
-{"name":"LuNa C","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-06-04","spotify":""},
-{"name":"Lyrah","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-06-12","created":"2026-06-12","spotify":""},
-{"name":"MANSA","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"manueltakesnote","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-14","created":"2026-05-14","spotify":""},
-{"name":"Matway","stage":"Outreach","role":"Owner","country":"IT","hometown":"","comments":1,"lastComment":"2026-05-15","created":"2026-05-14","spotify":""},
-{"name":"Me As A Girl","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":""},
-{"name":"Meanetik","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-26","created":"2026-05-26","spotify":""},
-{"name":"Mia Niles","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-02","spotify":""},
-{"name":"Mike Crook","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-05-29","created":"2026-05-29","spotify":"https://open.spotify.com/artist/mikecrook"},
-{"name":"mustbejohn","stage":"Outreach","role":"Owner","country":"GB","hometown":"","comments":1,"lastComment":"2026-05-15","created":"2026-05-14","spotify":""},
-{"name":"navara.mp3","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-14","created":"2026-05-14","spotify":""},
-{"name":"nobody serious","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-06-15","spotify":""},
-{"name":"NostalgicRedux","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":""},
-{"name":"NOVEMBER KID","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":2,"lastComment":"2026-05-15","created":"2026-05-14","spotify":""},
-{"name":"Olli P","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-29","created":"2026-05-29","spotify":"https://open.spotify.com/artist/ollip"},
-{"name":"onlywoke","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-09","created":"2026-06-09","spotify":""},
-{"name":"Ordinary Kid","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-15","spotify":""},
-{"name":"Pascal Silva","stage":"Outreach","role":"Owner","country":"NO","hometown":"","comments":1,"lastComment":"2026-05-12","created":"2026-05-07","spotify":""},
-{"name":"PIXY","stage":"Outreach","role":"Owner","country":"KR","hometown":"","comments":1,"lastComment":"2026-05-21","created":"2026-05-20","spotify":""},
-{"name":"prodbyjunixr","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-18","created":"2026-06-18","spotify":""},
-{"name":"prodshushy","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-11","created":"2026-06-11","spotify":"https://open.spotify.com/artist/shushy"},
-{"name":"RADA","stage":"Outreach","role":"Owner","country":"GB","hometown":"","comments":0,"lastComment":"","created":"2026-05-04","spotify":""},
-{"name":"RDM/RPT","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":""},
-{"name":"Rene_Blue_","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-01","spotify":""},
-{"name":"Robbie Doherty","stage":"Outreach","role":"Owner + Scout","country":"GB","hometown":"","comments":1,"lastComment":"2026-06-17","created":"2026-06-17","spotify":"https://open.spotify.com/artist/robbie"},
-{"name":"Rumari","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-21","created":"2026-05-20","spotify":""},
-{"name":"Ryan Leahan","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-01","spotify":""},
-{"name":"Sameya","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":"https://open.spotify.com/artist/sameya"},
-{"name":"Say Less","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-04","spotify":""},
-{"name":"Secret Floor","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-30","spotify":""},
-{"name":"SEUNG","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-17","created":"2026-06-17","spotify":"https://open.spotify.com/artist/seung"},
-{"name":"Sevag H","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-05-01","spotify":""},
-{"name":"SHAKING","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-06-12","spotify":"https://open.spotify.com/artist/shaking"},
-{"name":"Showda","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-12","created":"2026-05-12","spotify":""},
-{"name":"SKYWALKER","stage":"Outreach","role":"Owner","country":"CZ","hometown":"","comments":1,"lastComment":"2026-06-03","created":"2026-06-03","spotify":""},
-{"name":"Small Town Kid","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-29","spotify":""},
-{"name":"sometimes jah","stage":"Outreach","role":"Owner + Scout","country":"AU","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":"https://open.spotify.com/artist/jah"},
-{"name":"Souly Had","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"Albany","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":""},
-{"name":"spirit blue","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-13","spotify":""},
-{"name":"Star.One","stage":"Outreach","role":"Owner","country":"GB","hometown":"London","comments":1,"lastComment":"2026-05-15","created":"2026-05-14","spotify":""},
-{"name":"Steele","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-01","spotify":""},
-{"name":"STUTZ","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-15","created":"2026-05-14","spotify":""},
-{"name":"Target Demographic","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-03","spotify":""},
-{"name":"Teeb","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-18","created":"2026-05-15","spotify":""},
-{"name":"Toby Romeo","stage":"Outreach","role":"Owner + Scout","country":"AT","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-06-16","spotify":""},
-{"name":"Tommy Fleece","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":"https://open.spotify.com/artist/fleece"},
-{"name":"TS Graye","stage":"Outreach","role":"Owner + Scout","country":"GB","hometown":"Bristol","comments":1,"lastComment":"2026-06-12","created":"2026-06-12","spotify":"https://open.spotify.com/artist/tsgraye"},
-{"name":"Two B","stage":"Outreach","role":"Owner","country":"CO","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"VELUM","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-03","spotify":""},
-{"name":"Waxx Off","stage":"Outreach","role":"Owner + Scout","country":"AU","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-06-16","spotify":"https://open.spotify.com/artist/waxxoff"},
-{"name":"Webinar™","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"WENO","stage":"Outreach","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-30","spotify":""},
-{"name":"Willo","stage":"Outreach","role":"Owner + Scout","country":"AU","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-04","spotify":""},
-{"name":"Wuki","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-16","created":"2026-06-16","spotify":"https://open.spotify.com/artist/wuki"},
-{"name":"xxtristanxo","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"Raleigh","comments":1,"lastComment":"2026-06-18","created":"2026-06-18","spotify":"https://open.spotify.com/artist/tristan"},
-{"name":"XΛLMΛN","stage":"Outreach","role":"Owner + Scout","country":"","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":""},
-{"name":"Yaeji","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"Seoul","comments":2,"lastComment":"2026-06-16","created":"2026-06-16","spotify":"https://open.spotify.com/artist/yaeji"},
-{"name":"Yameii Online","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":""},
-{"name":"Yazida","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-05-01","spotify":""},
-{"name":"Yung Bae","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-02","spotify":""},
-{"name":"ZOOTAH","stage":"Outreach","role":"Owner","country":"US","hometown":"","comments":1,"lastComment":"2026-05-15","created":"2026-05-14","spotify":""},
-{"name":"Łaszewo","stage":"Outreach","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":""},
-{"name":"22 Interns","stage":"Prospect","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-22","spotify":""},
-{"name":"angst!","stage":"Prospect","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-04-28","spotify":""},
-{"name":"Arden Jones","stage":"Prospect","role":"Owner + Scout","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-06-17","spotify":""},
-{"name":"AVE","stage":"Prospect","role":"Owner","country":"IT","hometown":"","comments":0,"lastComment":"","created":"2026-05-29","spotify":"https://open.spotify.com/artist/ave"},
-{"name":"botpremade","stage":"Prospect","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-29","spotify":""},
-{"name":"camoufly","stage":"Prospect","role":"Owner + Scout","country":"IT","hometown":"","comments":2,"lastComment":"2026-05-05","created":"2026-05-01","spotify":""},
-{"name":"Carmelo","stage":"Prospect","role":"Owner","country":"GR","hometown":"","comments":0,"lastComment":"","created":"2026-06-10","spotify":""},
-{"name":"CONNIE","stage":"Prospect","role":"Owner + Scout","country":"JP","hometown":"","comments":0,"lastComment":"","created":"2026-05-29","spotify":""},
-{"name":"Dallin Dance","stage":"Prospect","role":"Owner","country":"US","hometown":"","comments":0,"lastComment":"","created":"2026-05-08","spotify":""},
-{"name":"for stephen","stage":"Prospect","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-04-22","spotify":""},
-{"name":"ILVS","stage":"Prospect","role":"Owner","country":"GR","hometown":"","comments":0,"lastComment":"","created":"2026-06-10","spotify":""},
-{"name":"it's murph","stage":"Prospect","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-05-08","created":"2026-04-28","spotify":""},
-{"name":"Jules","stage":"Prospect","role":"Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-29","spotify":""},
-{"name":"Leon Flydal","stage":"Prospect","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-13","spotify":""},
-{"name":"Lina Love","stage":"Prospect","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"makiadams_","stage":"Prospect","role":"Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-29","spotify":""},
-{"name":"Monica Ott","stage":"Prospect","role":"Owner + Scout","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-29","spotify":""},
-{"name":"Mont Rouge","stage":"Prospect","role":"Owner","country":"CH","hometown":"","comments":0,"lastComment":"","created":"2026-05-07","spotify":""},
-{"name":"MPH","stage":"Prospect","role":"Owner + Scout","country":"GB","hometown":"","comments":1,"lastComment":"2026-05-01","created":"2026-05-01","spotify":""},
-{"name":"Prod.Krysis","stage":"Prospect","role":"Owner + Scout","country":"IT","hometown":"","comments":0,"lastComment":"","created":"2026-05-29","spotify":""},
-{"name":"Reyy","stage":"Prospect","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-26","created":"2026-05-26","spotify":""},
-{"name":"Roman District","stage":"Prospect","role":"Owner","country":"","hometown":"","comments":0,"lastComment":"","created":"2026-05-08","spotify":""},
-{"name":"Southbound","stage":"Prospect","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-11","created":"2026-05-11","spotify":""},
-{"name":"TERREA","stage":"Prospect","role":"Owner","country":"","hometown":"","comments":1,"lastComment":"2026-05-20","created":"2026-05-20","spotify":""},
-{"name":"Vivace","stage":"Prospect","role":"Owner","country":"","hometown":"","comments":2,"lastComment":"2026-05-12","created":"2026-05-11","spotify":""},
-{"name":"Yung Cloudy","stage":"Prospect","role":"Owner + Scout","country":"US","hometown":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-01","spotify":""}
+{"name":"Mat Zo","stage":"In talks","role":"Owner + Scout","country":"GB","comments":1,"lastComment":"2026-06-11","created":"2026-06-11","spotify":"https://open.spotify.com"},
+{"name":"Vexwave","stage":"In talks","role":"Owner + Scout","country":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-01","spotify":""},
+{"name":"XvallariX","stage":"In talks","role":"Owner + Scout","country":"","comments":1,"lastComment":"2026-06-04","created":"2026-06-01","spotify":""},
+{"name":"STRAENGE","stage":"In talks","role":"Owner","country":"","comments":1,"lastComment":"2026-05-29","created":"2026-05-29","spotify":"https://open.spotify"},
+{"name":"Tiësto","stage":"In talks","role":"Owner + Scout","country":"NL","comments":3,"lastComment":"2026-05-08","created":"2026-05-01","spotify":"https://open.spotify"},
+{"name":"Chris Lake","stage":"In talks","role":"Owner + Scout","country":"GB","comments":2,"lastComment":"2026-06-18","created":"2026-05-01","spotify":""},
+{"name":"CARTFISH","stage":"In talks","role":"Owner + Scout","country":"US","comments":2,"lastComment":"2026-06-19","created":"2026-06-18","spotify":"https://open.spotify"},
+{"name":"Apex","stage":"Negotiating","role":"Owner","country":"","comments":4,"lastComment":"2026-05-08","created":"2026-05-07","spotify":""},
+{"name":"Garnic","stage":"Negotiating","role":"Owner","country":"ES","comments":2,"lastComment":"2026-05-21","created":"2026-05-20","spotify":""},
+{"name":"MALARKEY","stage":"Negotiating","role":"Owner + Scout","country":"GB","comments":3,"lastComment":"2026-06-18","created":"2026-04-23","spotify":""},
+{"name":"Syn Cole","stage":"Active","role":"Owner","country":"EE","comments":1,"lastComment":"2026-06-19","created":"2026-04-23","spotify":"https://open.spotify"},
+{"name":"Brooks","stage":"Catalogue","role":"Owner","country":"NL","comments":0,"lastComment":"","created":"2026-04-23","spotify":"https://open.spotify"},
+{"name":"Ship Wrek","stage":"Catalogue","role":"Owner","country":"US","comments":1,"lastComment":"2026-06-16","created":"2026-04-23","spotify":"https://open.spotify"},
+{"name":"2night","stage":"Outreach","role":"Owner + Scout","country":"","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":""},
+{"name":"4andre","stage":"Outreach","role":"Owner + Scout","country":"","comments":1,"lastComment":"2026-06-08","created":"2026-06-08","spotify":"https://open.spotify"},
+{"name":"ACRAZE","stage":"Outreach","role":"Owner + Scout","country":"US","comments":1,"lastComment":"2026-06-15","created":"2026-06-15","spotify":"https://open.spotify"},
+{"name":"Amava","stage":"Outreach","role":"Owner + Scout","country":"US","comments":1,"lastComment":"2026-06-04","created":"2026-06-03","spotify":""},
+{"name":"22 Interns","stage":"Prospect","role":"Owner","country":"","comments":0,"lastComment":"","created":"2026-05-22","spotify":""},
+{"name":"camoufly","stage":"Prospect","role":"Owner + Scout","country":"IT","comments":2,"lastComment":"2026-05-05","created":"2026-05-01","spotify":""}
 ];
 
-// ─── STATE ──────────────────────────────────────────────────────────────────
-let db = { pipeline: [], activity: [], scheduled: [] };
+let db = { pipeline: [], activity: [] };
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
     loadState();
-    switchView('active-desks');
-    lucide.createIcons();
 });
 
 function loadState() {
     try {
-        const stored = localStorage.getItem('mar_anr_v4');
+        const stored = localStorage.getItem('mar_anr_v5');
         if (stored) { db = JSON.parse(stored); }
-        else { seedDb(); }
-    } catch(e) { seedDb(); }
+        else { db = { pipeline: [...SEED], activity: [] }; }
+    } catch(e) { db = { pipeline: [...SEED], activity: [] }; }
     refreshAll();
+    switchView('active-desks');
 }
 
-function seedDb() {
-    db = { pipeline: JSON.parse(JSON.stringify(SEED)), activity: [], scheduled: [] };
-    save();
-}
+function save() { localStorage.setItem('mar_anr_v5', JSON.stringify(db)); }
 
-function save() {
-    try { localStorage.setItem('mar_anr_v4', JSON.stringify(db)); } catch(e) {}
-}
-
-// ─── NAV ─────────────────────────────────────────────────────────────────────
 function switchView(viewId) {
     document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-    const target = document.getElementById(`view-${viewId}`);
-    if (target) target.classList.remove('hidden');
-
+    document.getElementById(`view-${viewId}`).classList.remove('hidden');
     document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-    // Map view id to button
-    const btnMap = { 'active-desks':'desks', 'all-roster':'all', 'system-logs':'logs', 'quickadd':'logs' };
-    const key = btnMap[viewId] || viewId;
-    const btn = document.getElementById(`nav-btn-${key}`);
-    if (btn) btn.classList.add('active');
+    const mapping = { 'active-desks':'desks', 'all-roster':'all', 'system-logs':'logs', 'quickadd':'logs' };
+    const targetBtn = document.getElementById(`nav-btn-${mapping[viewId]}`);
+    if (targetBtn) targetBtn.classList.add('active');
     lucide.createIcons();
 }
 
-// ─── SORT HELPERS ────────────────────────────────────────────────────────────
-function sortArtists(arr, mode) {
-    const copy = [...arr];
-    if (mode === 'az')       return copy.sort((a,b) => a.name.localeCompare(b.name));
-    if (mode === 'comments') return copy.sort((a,b) => (b.comments||0) - (a.comments||0));
-    // recent = sort by lastComment date desc, then created desc
-    return copy.sort((a,b) => {
-        const da = a.lastComment || a.created || '';
-        const db2 = b.lastComment || b.created || '';
-        return db2.localeCompare(da);
-    });
-}
-
-// ─── PIPELINE STRIP ─────────────────────────────────────────────────────────
-const STAGE_CFG = [
-    { stage:'Outreach',    pill:'pill-outreach', label:'Outreach' },
-    { stage:'In talks',    pill:'pill-intalks',  label:'In Talks' },
-    { stage:'Negotiating', pill:'pill-neg',      label:'Negotiating' },
-    { stage:'Active',      pill:'pill-active',   label:'Active' },
-    { stage:'Catalogue',   pill:'pill-catalogue',label:'Catalogue' },
-    { stage:'Prospect',    pill:'pill-prospect', label:'Prospect' },
-];
-
-function renderPipelineStrip() {
-    const strip = document.getElementById('pipeline-strip');
-    strip.innerHTML = STAGE_CFG.map(({ stage, pill, label }) => {
-        const count = db.pipeline.filter(p => p.stage === stage).length;
-        return `
-        <div class="bg-white border border-neutral-200 rounded-xl px-4 py-3 flex items-center justify-between gap-2 shadow-sm">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-400">${label}</span>
-            <span class="text-sm font-bold text-neutral-900">${count}</span>
-        </div>`;
-    }).join('');
-}
-
-// ─── DESK CARDS ──────────────────────────────────────────────────────────────
 function renderDesks() {
-    const outQ  = document.getElementById('searchOutreach').value.toLowerCase();
+    const outQ = document.getElementById('searchOutreach').value.toLowerCase();
     const talkQ = document.getElementById('searchInTalks').value.toLowerCase();
-    const outSort  = document.getElementById('sortOutreach').value;
-    const talkSort = document.getElementById('sortInTalks').value;
 
-    const outreach = sortArtists(db.pipeline.filter(p => p.stage === 'Outreach' && p.name.toLowerCase().includes(outQ)), outSort);
-    const intalks  = sortArtists(db.pipeline.filter(p => p.stage === 'In talks' && p.name.toLowerCase().includes(talkQ)), talkSort);
+    const outreach = db.pipeline.filter(p => p.stage === 'Outreach' && p.name.toLowerCase().includes(outQ));
+    const intalks = db.pipeline.filter(p => p.stage === 'In talks' && p.name.toLowerCase().includes(talkQ));
 
     document.getElementById('badge-outreach-count').textContent = outreach.length;
-    document.getElementById('badge-intalks-count').textContent  = intalks.length;
+    document.getElementById('badge-intalks-count').textContent = intalks.length;
 
-    const outEl  = document.getElementById('outreach-desk-list');
-    const talkEl = document.getElementById('intalks-desk-list');
-
-    outEl.innerHTML  = outreach.length  ? outreach.map(buildCard).join('') : emptyState('No outreach targets match this filter.');
-    talkEl.innerHTML = intalks.length   ? intalks.map(buildCard).join('')  : emptyState('No artists in talks match this filter.');
+    document.getElementById('outreach-desk-list').innerHTML = outreach.map(buildCardHTML).join('');
+    document.getElementById('intalks-desk-list').innerHTML = intalks.map(buildCardHTML).join('');
     lucide.createIcons();
 }
 
-function emptyState(msg) {
-    return `<div class="empty-state"><i data-lucide="inbox" class="w-8 h-8"></i><p class="text-xs font-medium">${msg}</p></div>`;
-}
-
-function buildCard(p) {
+function buildCardHTML(p) {
     const idx = db.pipeline.findIndex(x => x.name === p.name);
-    const spotify = p.spotify
-        ? `<a href="${p.spotify}" target="_blank" class="inline-flex items-center gap-1 bg-[#1DB954]/10 hover:bg-[#1DB954]/20 border border-[#1DB954]/30 text-[#15803d] font-bold px-2.5 py-1 rounded-lg text-[10px] uppercase tracking-wider transition">
-               <i data-lucide="music-2" class="w-3 h-3"></i>Spotify
-           </a>`
-        : '';
-
-    const commentHtml = p.lastComment
-        ? `<p class="text-[11px] text-neutral-500 bg-neutral-50 px-2.5 py-1.5 rounded-lg border border-neutral-100 mt-2 font-medium leading-relaxed italic truncate">${esc(p.lastComment)}</p>`
-        : '';
-
-    // Stage options for this card
-    const stages = ['Outreach','In talks','Negotiating','Active','Catalogue','Prospect'];
-    const stageOpts = stages.map(s => `<option value="${s}" ${p.stage===s?'selected':''}>${s}</option>`).join('');
-
     return `
-    <div class="desk-card bg-white border border-neutral-200 rounded-xl p-3.5 flex gap-3" data-idx="${idx}">
-        <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 flex-wrap">
-                <span class="text-sm font-bold text-neutral-900 truncate max-w-[180px]">${esc(p.name)}</span>
-                ${p.country ? `<span class="text-[10px] font-mono font-bold text-neutral-400 bg-neutral-100 px-1.5 py-0.5 rounded">${esc(p.country)}</span>` : ''}
-                ${p.comments > 0 ? `<span class="text-[10px] font-bold text-neutral-400">${p.comments} log${p.comments>1?'s':''}</span>` : ''}
+    <div class="desk-card bg-white border border-neutral-200 rounded-xl p-4 flex justify-between items-start gap-4">
+        <div class="min-w-0 flex-1 space-y-1">
+            <div class="flex items-center gap-2">
+                <span class="text-sm font-bold text-neutral-900">${esc(p.name)}</span>
+                <span class="text-[10px] font-mono text-neutral-400 font-bold">Created: ${p.created}</span>
             </div>
-            <p class="text-[11px] text-neutral-400 font-medium mt-0.5">${esc(p.role||'Scout Line')} <span class="text-neutral-300">·</span> <span class="font-mono">${p.created||'—'}</span></p>
-            ${commentHtml}
+            <p class="text-xs text-neutral-500 font-semibold">${esc(p.role)} ${p.country ? `• ${p.country}` : ''}</p>
+            ${p.lastComment ? `<p class="text-xs text-neutral-600 bg-neutral-50 border border-neutral-100 rounded-lg p-2 mt-2 italic">"${esc(p.lastComment)}"</p>` : ''}
         </div>
         <div class="flex flex-col items-end gap-2 shrink-0">
-            ${spotify}
-            <select onchange="updateStage(${idx}, this.value)" class="bg-neutral-50 text-[10px] font-bold rounded-lg border border-neutral-200 px-2 py-1 focus:outline-none text-neutral-700 cursor-pointer">
-                ${stageOpts}
+            ${p.spotify ? `<a href="${p.spotify}" target="_blank" class="bg-neutral-50 hover:bg-neutral-100 border text-neutral-800 font-bold px-3 py-1.5 rounded-lg text-[10px] uppercase tracking-wider transition">Spotify link</a>` : '<span class="text-neutral-300 text-xs">—</span>'}
+            <select onchange="updateStage(${idx}, this.value)" class="bg-neutral-50 text-[10px] font-bold rounded border px-1.5 py-0.5">
+                <option value="Outreach" ${p.stage==='Outreach'?'selected':''}>Outreach</option>
+                <option value="In talks" ${p.stage==='In talks'?'selected':''}>In Talks</option>
+                <option value="Prospect" ${p.stage==='Prospect'?'selected':''}>Prospect</option>
+                <option value="Negotiating" ${p.stage==='Negotiating'?'selected':''}>Negotiating</option>
+                <option value="Active" ${p.stage==='Active'?'selected':''}>Active</option>
+                <option value="Catalogue" ${p.stage==='Catalogue'?'selected':''}>Catalogue</option>
             </select>
-            <button onclick="openEditModal(${idx})" class="text-neutral-300 hover:text-neutral-700 transition p-0.5 rounded" title="Edit / add note">
-                <i data-lucide="pencil" class="w-3 h-3"></i>
-            </button>
         </div>
     </div>`;
 }
 
-// ─── ARCHIVE TABLE ───────────────────────────────────────────────────────────
+function renderMinorStats() {
+    const stages = ["Prospect", "Negotiating", "Active", "Catalogue"];
+    document.getElementById('minor-counters-row').innerHTML = stages.map(st => `
+        <div>${st}: <span class="text-neutral-900 font-bold">${db.pipeline.filter(p => p.stage === st).length}</span></div>
+    `).join('<div class="text-neutral-200">|</div>');
+}
+
 function renderArchiveTable() {
     const q = document.getElementById('archiveSearch').value.toLowerCase();
-    const tbody = document.getElementById('archive-table-body');
+    const stages = ['Prospect','Negotiating','Active','Catalogue'];
+    const filtered = db.pipeline.filter(p => stages.includes(p.stage) && p.name.toLowerCase().includes(q));
 
-    const archiveStages = ['Prospect','Negotiating','Active','Catalogue'];
-    const filtered = db.pipeline.filter(p => archiveStages.includes(p.stage) && p.name.toLowerCase().includes(q));
-
-    if (!filtered.length) {
-        tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-8 text-center text-xs text-neutral-400 font-medium">No artists match this filter.</td></tr>`;
-        return;
-    }
-
-    const allStages = ['Prospect','Negotiating','Active','Catalogue','Outreach','In talks'];
-    tbody.innerHTML = filtered.map(p => {
+    document.getElementById('archive-table-body').innerHTML = filtered.map(p => {
         const oi = db.pipeline.findIndex(x => x.name === p.name);
-        const spotifyCell = p.spotify
-            ? `<a href="${p.spotify}" target="_blank" class="bg-[#1DB954]/10 hover:bg-[#1DB954]/20 border border-[#1DB954]/30 text-[#15803d] font-bold px-2 py-1 rounded-md text-[9px] uppercase tracking-wider transition">Open</a>`
-            : `<span class="text-neutral-300">—</span>`;
-        const opts = allStages.map(s => `<option value="${s}" ${p.stage===s?'selected':''}>${s}</option>`).join('');
         return `
-        <tr class="hover:bg-neutral-50/50 transition">
+        <tr class="hover:bg-neutral-50 transition">
             <td class="px-5 py-2.5 font-bold text-neutral-900">${esc(p.name)}</td>
             <td class="px-5 py-2.5">
-                <select onchange="updateStage(${oi}, this.value)" class="bg-white text-[10px] rounded-md border border-neutral-200 px-1.5 py-0.5 font-bold focus:outline-none">${opts}</select>
+                <select onchange="updateStage(${oi}, this.value)" class="bg-white text-[10px] rounded border px-1.5 py-0.5 font-bold">
+                    <option value="Prospect" ${p.stage==='Prospect'?'selected':''}>Prospect</option>
+                    <option value="Negotiating" ${p.stage==='Negotiating'?'selected':''}>Negotiating</option>
+                    <option value="Active" ${p.stage==='Active'?'selected':''}>Active</option>
+                    <option value="Catalogue" ${p.stage==='Catalogue'?'selected':''}>Catalogue</option>
+                    <option value="Outreach">Outreach</option>
+                    <option value="In talks">In Talks</option>
+                </select>
             </td>
-            <td class="px-5 py-2.5 text-neutral-500">${esc(p.role||'—')}</td>
+            <td class="px-5 py-2.5 text-neutral-500">${esc(p.role)}</td>
             <td class="px-5 py-2.5 font-mono text-neutral-600 font-semibold">${esc(p.country||'—')}</td>
-            <td class="px-5 py-2.5 text-center">${spotifyCell}</td>
-            <td class="px-5 py-2.5 font-mono text-neutral-400 font-bold text-[11px]">${p.created||'—'}</td>
-            <td class="px-5 py-2.5 text-right">
-                <button onclick="deleteArtist(${oi})" class="text-neutral-300 hover:text-red-500 transition p-1"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-            </td>
+            <td class="px-5 py-2.5 text-center">${p.spotify ? `<a href="${p.spotify}" target="_blank" class="bg-neutral-50 border text-neutral-800 font-bold px-2 py-0.5 rounded text-[9px] uppercase">Spotify link</a>` : '—'}</td>
+            <td class="px-5 py-2.5 font-mono text-neutral-400 font-bold">${p.created}</td>
+            <td class="px-5 py-2.5 text-right"><button onclick="deleteArtist(${oi})" class="text-neutral-300 hover:text-red-500 transition px-2"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></td>
         </tr>`;
     }).join('');
     lucide.createIcons();
 }
 
-function renderMinorStats() {
-    const el = document.getElementById('minor-counters-row');
-    el.innerHTML = ['Prospect','Negotiating','Active','Catalogue'].map(st => {
-        const count = db.pipeline.filter(p => p.stage === st).length;
-        return `
-        <div class="bg-white border border-neutral-200 p-3.5 rounded-xl shadow-sm">
-            <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">${st}</span>
-            <div class="text-xl font-bold text-neutral-900 mt-0.5">${count} <span class="text-xs font-normal text-neutral-400">artists</span></div>
-        </div>`;
-    }).join('');
-}
-
-// ─── ACTIVITY FEED ───────────────────────────────────────────────────────────
 function renderActivityFeed() {
-    const el = document.getElementById('activity-feed-container');
-    if (!db.activity.length) {
-        el.innerHTML = '<p class="text-xs text-neutral-400 py-4">No milestone trail entries logged.</p>';
-        return;
-    }
-    el.innerHTML = db.activity.map(log => `
-        <div class="bg-neutral-50 border border-neutral-100 p-3 rounded-xl flex items-start gap-3">
-            <div class="flex-1 min-w-0">
-                <div class="flex justify-between items-center text-[11px]">
-                    <span class="font-bold text-neutral-900">${esc(log.target)}</span>
-                    <span class="text-neutral-400 font-mono font-bold">${log.date}</span>
-                </div>
-                <p class="text-xs text-neutral-600 mt-0.5 font-medium">${esc(log.comment)}</p>
+    document.getElementById('activity-feed-container').innerHTML = db.activity.map(log => `
+        <div class="bg-neutral-50 border border-neutral-100 p-3 rounded-xl mb-2">
+            <div class="flex justify-between text-[11px] font-bold">
+                <span class="text-neutral-900">${esc(log.target)}</span>
+                <span class="text-neutral-400 font-mono">${log.date}</span>
             </div>
-        </div>`).join('');
+            <p class="text-xs text-neutral-600 mt-0.5 font-medium">${esc(log.comment)}</p>
+        </div>
+    `).join('');
 }
 
-function populateDatalists() {
-    document.getElementById('artist-datalist').innerHTML = db.pipeline.map(p => `<option value="${esc(p.name)}">`).join('');
-}
+function updateStage(idx, newStage) { db.pipeline[idx].stage = newStage; save(); refreshAll(); }
+function deleteArtist(idx) { if(confirm("Confirm deletion?")) { db.pipeline.splice(idx, 1); save(); refreshAll(); } }
 
-// ─── MUTATORS ────────────────────────────────────────────────────────────────
-function updateStage(idx, newStage) {
-    db.pipeline[idx].stage = newStage;
+function handleManualLog(e) {
+    e.preventDefault();
+    const target = document.getElementById('logTarget').value.trim();
+    const comment = document.getElementById('logComment').value.trim();
+    const today = new Date().toISOString().split('T')[0];
+
+    db.activity.unshift({ date: today, target, comment });
+    let pIdx = db.pipeline.findIndex(p => p.name.toLowerCase() === target.toLowerCase());
+    if(pIdx > -1) { db.pipeline[pIdx].lastComment = comment; }
+
     save(); refreshAll();
-}
-
-function deleteArtist(idx) {
-    if (confirm(`Remove "${db.pipeline[idx].name}" from the pipeline?`)) {
-        db.pipeline.splice(idx, 1);
-        save(); refreshAll();
-    }
+    document.getElementById('logTarget').value = '';
+    document.getElementById('logComment').value = '';
 }
 
 function handleFastAdd(e) {
     e.preventDefault();
     const name = document.getElementById('fastName').value.trim();
     const stage = document.getElementById('fastStage').value;
-    if (!name) return;
-    db.pipeline.unshift({ name, stage, role:'Owner', country:'', hometown:'', comments:0, lastComment:'', created:today(), spotify:'' });
+    if(!name) return;
+
+    db.pipeline.unshift({ name, stage, role: "Owner", country: "", comments: 0, lastComment: "", created: new Date().toISOString().split('T')[0], spotify: "" });
     save(); refreshAll();
     document.getElementById('fastAddForm').reset();
-}
-
-function handleManualLog(e) {
-    e.preventDefault();
-    const target  = document.getElementById('logTarget').value.trim();
-    const comment = document.getElementById('logComment').value.trim();
-    db.activity.unshift({ date:today(), type:'Artist', target, comment });
-    const pi = db.pipeline.findIndex(p => p.name.toLowerCase() === target.toLowerCase());
-    if (pi > -1) { db.pipeline[pi].lastComment = comment; db.pipeline[pi].comments = (db.pipeline[pi].comments||0)+1; }
-    save(); refreshAll();
-    document.getElementById('logTarget').value = '';
-    document.getElementById('logComment').value = '';
 }
 
 function handleBulkPaste(e) {
     e.preventDefault();
     const lines = document.getElementById('bulkPasteText').value.split('\n');
-    const td = today();
-    let parsed = 0;
+    const today = new Date().toISOString().split('T')[0];
+    let count = 0;
+
     lines.forEach(line => {
-        let clean = line.trim(); if (!clean) return;
-        let artist='', note='';
-        if (clean.includes(' - '))  { const pts=clean.split(' - '); artist=pts[0].trim(); note=pts.slice(1).join(' - ').trim(); }
-        else if (clean.includes(': ')) { const pts=clean.split(': '); artist=pts[0].trim(); note=pts.slice(1).join(': ').trim(); }
-        if (artist && note) {
-            db.activity.unshift({ date:td, type:'Artist', target:artist, comment:note });
-            const i = db.pipeline.findIndex(p => p.name.toLowerCase() === artist.toLowerCase());
-            if (i > -1) { db.pipeline[i].lastComment = note; db.pipeline[i].comments=(db.pipeline[i].comments||0)+1; }
-            else { db.pipeline.unshift({ name:artist, stage:'Outreach', role:'Owner', country:'', hometown:'', comments:1, lastComment:note, created:td, spotify:'' }); }
-            parsed++;
+        let clean = line.trim(); if(!clean) return;
+        let artist = "", note = "";
+
+        if(clean.includes(' - ')) { const pts = clean.split(' - '); artist = pts[0].trim(); note = pts.slice(1).join(' - ').trim(); }
+        else if(clean.includes(': ')) { const pts = clean.split(': '); artist = pts[0].trim(); note = pts.slice(1).join(': ').trim(); }
+
+        if(artist && note) {
+            db.activity.unshift({ date: today, target: artist, comment: note });
+            let idx = db.pipeline.findIndex(p => p.name.toLowerCase() === artist.toLowerCase());
+            if(idx > -1) { db.pipeline[idx].lastComment = note; }
+            else { db.pipeline.unshift({ name: artist, stage: "Outreach", role: "Owner", country: "", comments: 1, lastComment: note, created: today, spotify: "" }); }
+            count++;
         }
     });
+
     save(); refreshAll();
     document.getElementById('bulkPasteText').value = '';
-    alert(`Parsed and integrated ${parsed} line${parsed!==1?'s':''}.`);
+    alert(`Successfully synced ${count} updates.`);
     switchView('active-desks');
 }
 
-// ─── EDIT MODAL ──────────────────────────────────────────────────────────────
-function openEditModal(idx) {
-    const p = db.pipeline[idx];
-    document.getElementById('modal-idx').value      = idx;
-    document.getElementById('modal-title').textContent    = p.name;
-    document.getElementById('modal-subtitle').textContent = `${p.stage} · ${p.role||''}`;
-    document.getElementById('modal-spotify').value  = p.spotify || '';
-    document.getElementById('modal-country').value  = p.country || '';
-    document.getElementById('modal-comment').value  = '';
-    document.getElementById('edit-modal').classList.replace('hidden','flex');
-}
-
-function closeEditModal(e) {
-    if (e.target === document.getElementById('edit-modal'))
-        document.getElementById('edit-modal').classList.replace('flex','hidden');
-}
-
-function saveEditModal() {
-    const idx     = parseInt(document.getElementById('modal-idx').value);
-    const spotify = document.getElementById('modal-spotify').value.trim();
-    const country = document.getElementById('modal-country').value.trim().toUpperCase();
-    const comment = document.getElementById('modal-comment').value.trim();
-    if (spotify) db.pipeline[idx].spotify  = spotify;
-    if (country) db.pipeline[idx].country  = country;
-    if (comment) {
-        db.pipeline[idx].lastComment = comment;
-        db.pipeline[idx].comments = (db.pipeline[idx].comments||0)+1;
-        db.activity.unshift({ date:today(), type:'Artist', target:db.pipeline[idx].name, comment });
-    }
-    save(); refreshAll();
-    document.getElementById('edit-modal').classList.replace('flex','hidden');
-}
-
-// ─── EXPORT / IMPORT ─────────────────────────────────────────────────────────
+function refreshAll() { renderDesks(); renderMinorStats(); renderArchiveTable(); renderActivityFeed(); }
+function populateDatalists() {}
 function exportData() {
-    const blob = new Blob([JSON.stringify(db, null, 2)], { type:'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `mar_anr_${today()}.json`;
-    a.click();
+    const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `ar_desk_backup.json`; a.click();
 }
-
 function triggerImport() { document.getElementById('importFile').click(); }
-function importData(e) {
-    const file = e.target.files[0]; if (!file) return;
+function importData(event) {
+    const file = event.target.files[0]; if (!file) return;
     const r = new FileReader();
-    r.onload = evt => {
-        try {
-            const parsed = JSON.parse(evt.target.result);
-            if (parsed.pipeline) { db = parsed; save(); refreshAll(); alert('Import successful.'); }
-            else alert('Invalid database format.');
-        } catch { alert('Could not parse file.'); }
+    r.onload = function(e) {
+        try { const parsed = JSON.parse(e.target.result); if(parsed.pipeline) { db = parsed; save(); refreshAll(); } } 
+        catch(err) { alert("Invalid backup structure."); }
     };
     r.readAsText(file);
-    e.target.value = '';
 }
-
-// ─── UTILITIES ───────────────────────────────────────────────────────────────
-function refreshAll() {
-    renderPipelineStrip();
-    renderDesks();
-    renderMinorStats();
-    renderArchiveTable();
-    renderActivityFeed();
-    populateDatalists();
-}
-
-function today() { return new Date().toISOString().split('T')[0]; }
-
-function esc(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-}
+function esc(str) { if(!str) return ''; return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 </script>
 </body>
 </html>
-HTMLEOF
-echo "Done, file size: $(wc -c < /mnt/user-data/outputs/mars-safe-place-anr.html) bytes"
